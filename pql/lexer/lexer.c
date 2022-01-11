@@ -152,6 +152,30 @@ static token_T *get_comment_token(lexer_T *lexer)
       init_token_value_with_string(comment_buffer));
 }
 
+static token_T *get_string_token(lexer_T *lexer)
+{
+  token_pos_T start_pos = lexer->current_position;
+  advance_lexer(lexer);
+  char *string_buffer = calloc(100000, sizeof(char));
+  size_t current_index = 0;
+  while (lexer->current_character != '`')
+  {
+    if (finished(lexer))
+    {
+      log_error("lexer error: string not closed at %s:%d:%d(%d)", lexer->filename, lexer->current_position.line, lexer->current_position.column, lexer->current_position.index);
+      exit(1);
+    }
+    string_buffer[current_index] = lexer->current_character;
+    advance_lexer(lexer);
+    current_index++;
+  }
+  return init_token(
+      VSTRING,
+      start_pos,
+      lexer->current_position,
+      init_token_value_with_string(string_buffer));
+}
+
 token_T *next_token(lexer_T *lexer)
 {
   if (isspace(lexer->current_character))
@@ -162,6 +186,8 @@ token_T *next_token(lexer_T *lexer)
     return get_name_token(lexer);
   if (isdigit(lexer->current_character))
     return get_number_token(lexer);
+  if (lexer->current_character == '`')
+    return get_string_token(lexer);
   if (punctuator(lexer->current_character))
     return init_token(
         PUNCTUATOR,

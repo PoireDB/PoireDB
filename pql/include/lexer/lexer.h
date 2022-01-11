@@ -26,6 +26,7 @@
 
 #include "../token/token.h"
 #include "../token/position.h"
+#include "../log/log.h"
 #include <ctype.h>
 #include <string.h>
 
@@ -56,6 +57,8 @@ static token_T *get_name_token(lexer_T *lexer);
 static token_T *get_number_token(lexer_T *lexer);
 
 static token_T *get_comment_token(lexer_T *lexer);
+
+static token_T *get_string_token(lexer_T *lexer);
 
 token_T *next_token(lexer_T *lexer);
 

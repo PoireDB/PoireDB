@@ -25,7 +25,7 @@
 
 int main()
 {
-  lexer_T *l = init_lexer("main.c", "-- comment\n");
+  lexer_T *l = init_lexer("main.c", "`string");
   printf("%s", dump_token(next_token(l)));
   free(l);
 }
