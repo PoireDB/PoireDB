@@ -21,19 +21,20 @@
  *  SOFTWARE.
  */
 
-#ifndef _TOKEN_TYPE_H_
-#define _TOKEN_TYPE_H_
+#ifndef _TOKEN_POSITION_H_
+#define _TOKEN_POSITION_H_
 
-typedef enum TOKEN_TYPE_ENUM
+#include "../util/string.h"
+#include <stdlib.h>
+
+typedef struct TOKEN_POSITION_STRUCT
 {
-  VSTRING,
-  VCHARACTER,
-  VNUMBER,
-  VBOOLEAN,
-  KEYWORD,
-  PUNCTUATOR,
-  EOF,
-  ERROR,
-} token_type_T;
+  size_t index;
+  size_t line, column;
+} token_pos_T;
 
-#endif /* _TOKEN_TYPE_H_ */
+token_pos_T init_token_position(size_t index, size_t line, size_t column);
+token_pos_T advance_token_position(token_pos_T old_position);
+char *dump_token_position(token_pos_T position);
+
+#endif /* _TOKEN_POSITION_H_ */

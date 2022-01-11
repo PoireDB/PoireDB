@@ -21,26 +21,27 @@
  *  SOFTWARE.
  */
 
-#include "../include/token/token.h"
+#include "../include/token/position.h"
 
-token_T *init_token(
-    token_type_T type,
-    token_pos_T *start_pos, token_pos_T *end_pos,
-    token_value_T *value)
+token_pos_T init_token_position(size_t index, size_t line, size_t column)
 {
-  token_T *token = calloc(1, sizeof(struct TOKEN_STRUCT));
-  token->type = type;
-  token->start_pos = start_pos;
-  token->end_pos = end_pos;
-  token->value = value;
-  return token;
+  return (token_pos_T){
+      .index = index,
+      .line = line,
+      .column = column,
+  };
 }
 
-char *dump_token(token_T *token)
+char *dump_token_position(token_pos_T position)
 {
-  return format("tok(t:%d;sp:%s,ep:%s,v:%s)",
-                token->type,
-                dump_token_position(token->start_pos),
-                dump_token_position(token->end_pos),
-                dump_token_value(token->value, token->type));
+  return format("pos(index=%d, line=%d, column=%d)",
+                position.index, position.line, position.column);
+}
+
+token_pos_T advance_token_position(token_pos_T old_position)
+{
+  return init_token_position(
+      old_position.index + 1,
+      old_position.line,
+      old_position.column + 1);
 }

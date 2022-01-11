@@ -55,6 +55,10 @@ char *dump_token_value(token_value_T *value, token_type_T type)
 {
   switch (type)
   {
+  case VSTRING:
+  case COMMENT:
+  case IDENTIFIER:
+    return value->string;
   case VNUMBER:
     return format("%f", value->number);
   case PUNCTUATOR:

@@ -21,35 +21,24 @@
  *  SOFTWARE.
  */
 
-#ifndef _LEXER_H_
-#define _LEXER_H_
+#ifndef _TOKEN_H_
+#define _TOKEN_H_
 
-#include "../token/token.h"
-#include "../token/position.h"
-#include <string.h>
+#include "type.h"
+#include "value.h"
+#include "position.h"
+#include "../util/string.h"
 
-typedef struct LEXER_STRUCT
+typedef struct TOKEN_STRUCT
 {
-  char *filename;
-  char *input;
-  size_t input_length;
-  token_pos_T *current_position;
-  char current_character;
-  char next_character;
-} lexer_T;
+  token_type_T type;
+  token_pos_T start_pos;
+  token_pos_T end_pos;
+  token_value_T *value;
+} token_T;
 
-lexer_T *init_lexer(char *filename, char *input);
+token_T *init_token(
+    token_type_T type, token_pos_T start_pos, token_pos_T end_pos, token_value_T *value);
+char *dump_token(token_T *token);
 
-/**
- * @brief   Update current_character and next_character members
- * @param   lexer   lexer struct 
- */
-static void update_lexer(lexer_T *lexer);
-
-static void advance_lexer(lexer_T *lexer);
-
-static void skip_whitespace(lexer_T *lexer);
-
-token_T *next_token(lexer_T *lexer);
-
-#endif /* _LEXER_H_ */
+#endif /* _TOKEN_H_ */

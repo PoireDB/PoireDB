@@ -21,20 +21,26 @@
  *  SOFTWARE.
  */
 
-#ifndef _TOKEN_POSITION_H_
-#define _TOKEN_POSITION_H_
+#include "../include/token/token.h"
 
-#include "../util/string.h"
-#include <stdlib.h>
-
-typedef struct TOKEN_POSITION_STRUCT
+token_T *init_token(
+    token_type_T type,
+    token_pos_T start_pos, token_pos_T end_pos,
+    token_value_T *value)
 {
-  size_t index;
-  size_t line, column;
-} token_pos_T;
+  token_T *token = calloc(1, sizeof(struct TOKEN_STRUCT));
+  token->type = type;
+  token->start_pos = start_pos;
+  token->end_pos = end_pos;
+  token->value = value;
+  return token;
+}
 
-token_pos_T *init_token_position(size_t index, size_t line, size_t column);
-token_pos_T *advance_token_position(token_pos_T *old_position);
-char *dump_token_position(token_pos_T *position);
-
-#endif /* _TOKEN_POSITION_H_ */
+char *dump_token(token_T *token)
+{
+  return format("tok(t:%d;sp:%s,ep:%s,v:%s)",
+                token->type,
+                dump_token_position(token->start_pos),
+                dump_token_position(token->end_pos),
+                dump_token_value(token->value, token->type));
+}

@@ -21,24 +21,21 @@
  *  SOFTWARE.
  */
 
-#ifndef _TOKEN_H_
-#define _TOKEN_H_
+#ifndef _TOKEN_TYPE_H_
+#define _TOKEN_TYPE_H_
 
-#include "type.h"
-#include "value.h"
-#include "position.h"
-#include "../util/string.h"
-
-typedef struct TOKEN_STRUCT
+typedef enum TOKEN_TYPE_ENUM
 {
-  token_type_T type;
-  token_pos_T *start_pos;
-  token_pos_T *end_pos;
-  token_value_T *value;
-} token_T;
+  COMMENT,
+  VSTRING,
+  VCHARACTER,
+  VNUMBER,
+  VBOOLEAN,
+  KEYWORD,
+  PUNCTUATOR,
+  IDENTIFIER,
+  EOF,
+  ERROR,
+} token_type_T;
 
-token_T *init_token(
-    token_type_T type, token_pos_T *start_pos, token_pos_T *end_pos, token_value_T *value);
-char *dump_token(token_T *token);
-
-#endif /* _TOKEN_H_ */
+#endif /* _TOKEN_TYPE_H_ */
