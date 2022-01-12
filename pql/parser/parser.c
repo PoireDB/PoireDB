@@ -81,9 +81,9 @@ static void require_token(parser_T *parser, token_T *required)
 #ifdef cur_prefix
 #warning "cur_prefix macro will be removed"
 #undef cur_prefix
-#else
-#define cur_prefix parser->prefix_triggers[parser->prefix_triggers_amount]
 #endif
+
+#define cur_prefix parser->prefix_triggers[parser->prefix_triggers_amount]
 
 static void add_prefix_trigger_by_token(
     parser_T *parser, token_T *token_prefix, AST_T *(*eat_function)(parser_T *parser))
