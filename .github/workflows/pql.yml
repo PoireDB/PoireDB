@@ -1,4 +1,4 @@
-name: Check PQL
+name: check-pql
 
 on:
   push:
