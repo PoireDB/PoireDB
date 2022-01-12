@@ -7,7 +7,7 @@
 PoireDB - is an experimental DBMS made in C.
 
 ## Compiling on Windows
-You can compile pql with MinGW:
+Requirements: `Visual Studio, MSBuild, CMake`
 ```powershell
 cmake -S . -B build/
 cd build/
@@ -15,6 +15,7 @@ MSBuild.exe pql.sln
 ```
 
 ## On Linux
+Requirements: `Makefile, CMake, GCC`
 ```bash
 cmake -S . -B build/
 cd build/
