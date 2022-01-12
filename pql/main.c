@@ -21,11 +21,9 @@
  *  SOFTWARE.
  */
 
-#include "include/lexer/lexer.h"
+#include <stdio.h>
 
 int main()
 {
-  lexer_T *l = init_lexer("main.c", "`string");
-  printf("%s", dump_token(next_token(l)));
-  free(l);
+  printf("not made yet");
 }
