@@ -21,21 +21,23 @@
  *  SOFTWARE.
  */
 
-#ifndef _TOKEN_TYPE_H_
-#define _TOKEN_TYPE_H_
+#include "include/util/file.h"
+#include "include/lexer/lexer.h"
 
-typedef enum TOKEN_TYPE_ENUM
+int main(int argc, char **argv)
 {
-  COMMENT,
-  VSTRING,
-  VCHARACTER,
-  VNUMBER,
-  VBOOLEAN,
-  KEYWORD,
-  PUNCTUATOR,
-  IDENTIFIER,
-  _EOF,
-  ERROR,
-} token_type_T;
-
-#endif /* _TOKEN_TYPE_H_ */
+  if (argc != 2)
+  {
+    printf("usage: pql_lex <filename>");
+    exit(1);
+  }
+  char *filename = argv[1];
+  char *content = read_file(filename);
+  lexer_T *lexer = init_lexer(filename, content);
+  token_T *tok = calloc(1, sizeof(struct TOKEN_STRUCT));
+  while (tok->type != _EOF)
+  {
+    tok = next_token(lexer);
+    printf("%s\n", dump_token(tok));
+  }
+}

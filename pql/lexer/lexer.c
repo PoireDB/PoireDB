@@ -162,13 +162,15 @@ static token_T *get_string_token(lexer_T *lexer)
   {
     if (finished(lexer))
     {
-      log_error("lexer error: string not closed at %s:%d:%d(%d)", lexer->filename, lexer->current_position.line, lexer->current_position.column, lexer->current_position.index);
+      log_error("string not closed with '`': %s:%d:%d(%d)", lexer->filename,
+                lexer->current_position.line, lexer->current_position.column, lexer->current_position.index);
       exit(1);
     }
     string_buffer[current_index] = lexer->current_character;
     advance_lexer(lexer);
     current_index++;
   }
+  advance_lexer(lexer);
   return init_token(
       VSTRING,
       start_pos,
@@ -178,6 +180,12 @@ static token_T *get_string_token(lexer_T *lexer)
 
 token_T *next_token(lexer_T *lexer)
 {
+  if (finished(lexer))
+    return init_token(
+        _EOF,
+        lexer->current_position,
+        advance_token_position(lexer->current_position),
+        init_token_value_with_character('\0'));
   if (isspace(lexer->current_character))
     skip_whitespace(lexer);
   if (lexer->current_character == '-' && lexer->next_character == '-')
@@ -189,11 +197,16 @@ token_T *next_token(lexer_T *lexer)
   if (lexer->current_character == '`')
     return get_string_token(lexer);
   if (punctuator(lexer->current_character))
+  {
+    char punctuator = lexer->current_character;
+    token_pos_T start_pos = lexer->current_position;
+    advance_lexer(lexer);
     return init_token(
         PUNCTUATOR,
+        start_pos,
         lexer->current_position,
-        advance_token_position(lexer->current_position),
-        init_token_value_with_character(lexer->current_character));
+        init_token_value_with_character(punctuator));
+  }
   token_T *error_token = init_token(
       ERROR,
       lexer->current_position,

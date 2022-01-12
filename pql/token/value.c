@@ -67,7 +67,7 @@ char *dump_token_value(token_value_T *value, token_type_T type)
     return format("%c", value->character);
   case VBOOLEAN:
     return value->boolean ? "true" : "false";
-  case EOF:
+  case _EOF:
     return "(eof)";
   default:
     return "(?)";

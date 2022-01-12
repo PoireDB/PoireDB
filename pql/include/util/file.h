@@ -21,21 +21,12 @@
  *  SOFTWARE.
  */
 
-#ifndef _TOKEN_TYPE_H_
-#define _TOKEN_TYPE_H_
+#ifndef _UTIL_FILE_H_
+#define _UTIL_FILE_H_
 
-typedef enum TOKEN_TYPE_ENUM
-{
-  COMMENT,
-  VSTRING,
-  VCHARACTER,
-  VNUMBER,
-  VBOOLEAN,
-  KEYWORD,
-  PUNCTUATOR,
-  IDENTIFIER,
-  _EOF,
-  ERROR,
-} token_type_T;
+#include <stdio.h>
+#include <stdlib.h>
 
-#endif /* _TOKEN_TYPE_H_ */
+char *read_file(char *filename);
+
+#endif /* _UTIL_FILE_H_ */

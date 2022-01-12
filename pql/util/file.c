@@ -21,21 +21,23 @@
  *  SOFTWARE.
  */
 
-#ifndef _TOKEN_TYPE_H_
-#define _TOKEN_TYPE_H_
+#include "../include/util/file.h"
 
-typedef enum TOKEN_TYPE_ENUM
+char *read_file(char *filename)
 {
-  COMMENT,
-  VSTRING,
-  VCHARACTER,
-  VNUMBER,
-  VBOOLEAN,
-  KEYWORD,
-  PUNCTUATOR,
-  IDENTIFIER,
-  _EOF,
-  ERROR,
-} token_type_T;
-
-#endif /* _TOKEN_TYPE_H_ */
+  char *buffer = 0;
+  size_t length;
+  FILE *file = fopen(filename, "rb");
+  if (file)
+  {
+    fseek(file, 0, SEEK_END);
+    length = ftell(file);
+    fseek(file, 0, SEEK_SET);
+    buffer = calloc(length, length);
+    if (buffer)
+      fread(buffer, 1, length, file);
+    fclose(file);
+    return buffer;
+  }
+  return NULL;
+}
