@@ -188,14 +188,6 @@ static token_T *get_string_token(lexer_T *lexer)
 
 token_T *next_token(lexer_T *lexer)
 {
-  /*
-  if (finished(lexer))
-    return init_token(
-        _EOF,
-        lexer->current_position,
-        advance_token_position(lexer->current_position),
-        init_token_value_with_character('\0'));
-  */
   if (isspace(lexer->current_character))
     skip_whitespace(lexer);
   if (lexer->current_character == '-' && lexer->next_character == '-')
