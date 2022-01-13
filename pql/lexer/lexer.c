@@ -84,7 +84,7 @@ static token_T *get_name_token(lexer_T *lexer)
         lexer->current_position,
         init_token_value_with_boolean(!strcmp(name_buffer, "true")));
   }
-  if (!strcmp(name_buffer, "db"))
+  if (!strcmp(name_buffer, "db") || !strcmp(name_buffer, "delete"))
   {
     return init_token(
         KEYWORD,
@@ -188,12 +188,14 @@ static token_T *get_string_token(lexer_T *lexer)
 
 token_T *next_token(lexer_T *lexer)
 {
+  /*
   if (finished(lexer))
     return init_token(
         _EOF,
         lexer->current_position,
         advance_token_position(lexer->current_position),
         init_token_value_with_character('\0'));
+  */
   if (isspace(lexer->current_character))
     skip_whitespace(lexer);
   if (lexer->current_character == '-' && lexer->next_character == '-')
@@ -215,13 +217,22 @@ token_T *next_token(lexer_T *lexer)
         lexer->current_position,
         init_token_value_with_character(punctuator));
   }
-  token_T *error_token = init_token(
-      ERROR,
+  if (!finished(lexer))
+  {
+    token_T *error_token = init_token(
+        ERROR,
+        lexer->current_position,
+        advance_token_position(lexer->current_position),
+        init_token_value_with_character(lexer->current_character));
+    advance_lexer(lexer);
+    return error_token;
+  }
+
+  return init_token(
+      _EOF,
       lexer->current_position,
       advance_token_position(lexer->current_position),
-      init_token_value_with_character(lexer->current_character));
-  advance_lexer(lexer);
-  return error_token;
+      init_token_value_with_character('\0'));
 }
 
 static bool letter(char character)

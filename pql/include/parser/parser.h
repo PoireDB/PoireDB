@@ -35,6 +35,9 @@ typedef struct PARSER_STRUCT
 
 parser_T *init_parser(lexer_T *lexer);
 query_AST_T *parser_parse(parser_T *parser);
+top_statement_AST_T **parser_parse_top_statements(parser_T *parser);
+top_statement_AST_T *parser_parse_top_statement(parser_T *parser);
+top_statement_AST_T *parser_parse_delete_top_statement(parser_T *parser);
 token_T *check_next_token(parser_T *parser);
 void require_token(parser_T *parser, token_type_T token_type);
 void require_keyword_token(parser_T *parser, char *keyword);
