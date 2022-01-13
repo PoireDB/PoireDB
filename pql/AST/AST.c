@@ -29,3 +29,10 @@ query_AST_T *init_query_AST(char *database_name)
   ast->database_name = database_name;
   return ast;
 }
+
+top_statement_AST_T *init_top_statement_AST(top_statement_AST_type_T type)
+{
+  top_statement_AST_T *stmt = calloc(1, sizeof(struct TOP_STATEMENT_AST_STRUCT));
+  stmt->type = type;
+  return stmt;
+}

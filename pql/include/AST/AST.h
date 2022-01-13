@@ -26,9 +26,24 @@
 
 #include <stdlib.h>
 
+typedef struct DELETE_TOP_STATEMENT_AST_STRUCT
+{
+  char *table_name;
+} delete_top_statement_AST_T;
+
+typedef enum TOP_STATEMENT_AST_TYPE
+{
+  DELETE
+} top_statement_AST_type_T;
+
 typedef struct TOP_STATEMENT_AST_STRUCT
 {
+  top_statement_AST_type_T type;
 
+  union
+  {
+    delete_top_statement_AST_T *delete_stmt;
+  } * statement;
 } top_statement_AST_T;
 
 typedef struct QUERY_AST_STRUCT
@@ -37,5 +52,6 @@ typedef struct QUERY_AST_STRUCT
 } query_AST_T;
 
 query_AST_T *init_query_AST(char *database_name);
+top_statement_AST_T *init_top_statement_AST(top_statement_AST_type_T type);
 
 #endif /* _AST_H_ */
