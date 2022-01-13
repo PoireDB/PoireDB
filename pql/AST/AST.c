@@ -23,10 +23,9 @@
 
 #include "../include/AST/AST.h"
 
-AST_T *init_AST_with_table_statement(struct TABLE_STATEMENT_AST_STRUCT *table_statement)
+query_AST_T *init_query_AST(char *database_name)
 {
-  AST_T *ast = calloc(1, sizeof(struct AST_STRUCT));
-  ast->type = AST_TABLE_STATEMENT;
-  ast->value->table_statement = table_statement;
+  query_AST_T *ast = calloc(1, sizeof(struct QUERY_AST_STRUCT));
+  ast->database_name = database_name;
   return ast;
 }

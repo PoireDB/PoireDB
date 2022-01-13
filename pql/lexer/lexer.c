@@ -84,6 +84,14 @@ static token_T *get_name_token(lexer_T *lexer)
         lexer->current_position,
         init_token_value_with_boolean(!strcmp(name_buffer, "true")));
   }
+  if (!strcmp(name_buffer, "db"))
+  {
+    return init_token(
+        KEYWORD,
+        start_pos,
+        lexer->current_position,
+        init_token_value_with_string(name_buffer));
+  }
   return init_token(
       IDENTIFIER,
       start_pos,

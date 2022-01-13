@@ -21,18 +21,19 @@
  *  SOFTWARE.
  */
 
-#ifndef _AST_STATEMENT_H_
-#define _AST_STATEMENT_H_
+#include "include/parser/parser.h"
+#include "include/util/file.h"
 
-#include "AST_struct.h"
-
-typedef struct TABLE_STATEMENT_AST_STRUCT
+int main(int argc, char **argv)
 {
-  char *table_name;
-  table_structure_AST_T *table_structure;
-} table_statement_AST_T;
-
-table_statement_AST_T *init_table_statement_AST(char *table_name,
-                                                table_structure_AST_T *table_structure);
-
-#endif /* _AST_STATEMENT_H_ */
+  if (argc != 2)
+  {
+    printf("usage: pql_lex <filename>");
+    exit(1);
+  }
+  char *filename = argv[1];
+  char *content = read_file(filename);
+  lexer_T *lexer = init_lexer(filename, content);
+  parser_T *parser = init_parser(lexer);
+  query_AST_T *ast = parser_parse(parser);
+}

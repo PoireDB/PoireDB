@@ -1,0 +1,8 @@
+{
+  "files.associations": {
+    "*.txt": "fsharp",
+    "value.h": "c",
+    "stdio.h": "c",
+    "parser.h": "c"
+  }
+}

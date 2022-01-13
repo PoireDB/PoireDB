@@ -31,45 +31,13 @@ typedef struct PARSER_STRUCT
 {
   lexer_T *lexer;
   token_T *current_token;
-  void (*lexing_error)(token_T *error_token);
-  void (*unexcepted_tok_error_by_type)(
-      token_type_T required_token_typed, token_T *unexcepted_token);
-  void (*unexcepted_tok_error)(
-      token_T *excepted_token, token_T *unexcepted_token);
-
-  // needed for registering a prefixes for statements eat functions:
-#define PREFIXES_MAX_SIZE 100000
-  struct PARSER_PREFIX_TRIGGER_STRUCT **prefix_triggers;
-  size_t prefix_triggers_amount;
 } parser_T;
 
-typedef struct PARSER_PREFIX_TRIGGER_STRUCT
-{
-  enum
-  {
-    TOKEN_PREFIX,
-    TOKEN_TYPE_PREFIX,
-  } prefix_type;
-  token_T *token_prefix;
-  token_type_T type_prefix;
-  AST_T *(*eat_function)(parser_T *parser);
-} parser_prefix_trigger_t;
-
-static token_T *init_token_with_null_pos(token_type_T type, token_value_T *value);
-
-parser_T *init_parser(
-    lexer_T *lexer,
-    void (*lexing_error)(token_T *error_token),
-    void (*unexcepted_tok_error_by_type)(token_type_T required_token_typed,
-                                         token_T *unexcepted_token),
-    void (*unexcepted_tok_error)(token_T *excepted_token, token_T *unexcepted_token));
-static void eat_next_token(parser_T *parser);
-static void require_token_by_type(parser_T *parser, token_type_T required_token_type);
-static void require_token(parser_T *parser, token_T *required);
-static void add_prefix_trigger_by_token(
-    parser_T *parser, token_T *token_prefix, AST_T *(*eat_function)(parser_T *parser));
-static void add_prefix_trigger_by_token_type(
-    parser_T *parser, token_type_T type_prefix, AST_T *(*eat_function)(parser_T *parser));
-static AST_T *eat_table_statement(parser_T *parser);
+parser_T *init_parser(lexer_T *lexer);
+query_AST_T *parser_parse(parser_T *parser);
+token_T *check_next_token(parser_T *parser);
+void require_token(parser_T *parser, token_type_T token_type);
+void require_keyword_token(parser_T *parser, char *keyword);
+void require_punctuator(parser_T *parser, char punctuator);
 
 #endif /* _PARSER_H_ */

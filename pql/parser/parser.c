@@ -23,91 +23,75 @@
 
 #include "../include/parser/parser.h"
 
-static token_T *init_token_with_null_pos(token_type_T type, token_value_T *value)
-{
-  return init_token(
-      type,
-      (token_pos_T){.index = 0, .line = 0, .column = 0},
-      (token_pos_T){.index = 0, .line = 0, .column = 0},
-      value);
-}
-
-parser_T *init_parser(
-    lexer_T *lexer,
-    void (*lexing_error)(token_T *error_token),
-    void (*unexcepted_tok_error_by_type)(token_type_T required_token_typed,
-                                         token_T *unexcepted_token),
-    void (*unexcepted_tok_error)(token_T *excepted_token, token_T *unexcepted_token))
+parser_T *init_parser(lexer_T *lexer)
 {
   parser_T *parser = calloc(1, sizeof(struct PARSER_STRUCT));
   parser->lexer = lexer;
-  parser->lexing_error = lexing_error;
-  parser->unexcepted_tok_error_by_type = unexcepted_tok_error_by_type;
-  parser->unexcepted_tok_error = unexcepted_tok_error;
-  parser->prefix_triggers = calloc(PREFIXES_MAX_SIZE,
-                                   sizeof(struct PARSER_PREFIX_TRIGGER_STRUCT *));
-  parser->prefix_triggers_amount = 0;
-  eat_next_token(parser);
-  add_prefix_trigger_by_token(parser,
-                              init_token_with_null_pos(
-                                  KEYWORD, init_token_value_with_string("table")),
-                              eat_table_statement);
+  parser->current_token = check_next_token(parser);
   return parser;
 }
 
-static void eat_next_token(parser_T *parser)
+token_T *check_next_token(parser_T *parser)
 {
-  parser->current_token = next_token(parser->lexer);
-}
-
-static void require_token_by_type(parser_T *parser, token_type_T required_token_type)
-{
-  if (required_token_type != parser->current_token->type)
+  token_T *tok = next_token(parser->lexer);
+  if (tok->type == ERROR)
   {
-    parser->unexcepted_tok_error_by_type(required_token_type, parser->current_token);
+    log_fatal("Unexcepted token: `%c`:(%d)", tok->value->character, (int)tok->value->character);
     exit(1);
   }
+  return tok;
 }
 
-static void require_token(parser_T *parser, token_T *required)
+query_AST_T *parser_parse(parser_T *parser)
 {
-  if (required != parser->current_token)
+  /* ========= parse db top statement ========= */
+  require_keyword_token(parser, "db");
+  char *database_name = parser->current_token->value->string;
+  require_token(parser, VSTRING);
+  require_punctuator(parser, ';');
+  // while (parser->current_token->type != _EOF)
+  // {
+  //   }
+  query_AST_T *ast = init_query_AST(database_name);
+  return ast;
+}
+
+void require_token(parser_T *parser, token_type_T token_type)
+{
+  if (parser->current_token->type != token_type)
   {
-    parser->unexcepted_tok_error(required, parser->current_token);
+    printf("unexcepted: `%s`", dump_token_value(parser->current_token->value, parser->current_token->type));
     exit(1);
   }
+  parser->current_token = check_next_token(parser);
 }
 
-#ifdef cur_prefix
-#warning "cur_prefix macro will be removed"
-#undef cur_prefix
-#endif
-
-#define cur_prefix parser->prefix_triggers[parser->prefix_triggers_amount]
-
-static void add_prefix_trigger_by_token(
-    parser_T *parser, token_T *token_prefix, AST_T *(*eat_function)(parser_T *parser))
+void require_keyword_token(parser_T *parser, char *keyword)
 {
-  cur_prefix->prefix_type = TOKEN_PREFIX;
-  cur_prefix->token_prefix = token_prefix;
-  cur_prefix->eat_function = eat_function;
-  parser->prefix_triggers_amount++;
+  if (parser->current_token->type != KEYWORD)
+  {
+    printf("unexcepted: `%s`", dump_token_value(parser->current_token->value, parser->current_token->type));
+    exit(1);
+  }
+  if (strcmp(parser->current_token->value->string, keyword))
+  {
+    printf("unexcepted keyword: `%s`, excepted: `%s`", parser->current_token->value->string, keyword);
+    exit(1);
+  }
+  parser->current_token = check_next_token(parser);
 }
 
-static void add_prefix_trigger_by_token_type(
-    parser_T *parser, token_type_T type_prefix, AST_T *(*eat_function)(parser_T *parser))
+void require_punctuator(parser_T *parser, char punctuator)
 {
-  cur_prefix->prefix_type = TOKEN_TYPE_PREFIX;
-  cur_prefix->type_prefix = type_prefix;
-  cur_prefix->eat_function = eat_function;
-  parser->prefix_triggers_amount++;
-}
-
-#undef cur_prefix
-
-static AST_T *eat_table_statement(parser_T *parser)
-{
-  eat_next_token(parser);
-  require_token_by_type(parser, VSTRING);
-  char *table_name = parser->current_token->value->string;
+  if (parser->current_token->type != PUNCTUATOR)
+  {
+    printf("unexcepted: `%s`", dump_token_value(parser->current_token->value, parser->current_token->type));
+    exit(1);
+  }
+  if (parser->current_token->value->character != punctuator)
+  {
+    printf("unexcepted punctuator: `%c`", parser->current_token->value->character);
+    exit(1);
+  }
+  parser->current_token = check_next_token(parser);
 }

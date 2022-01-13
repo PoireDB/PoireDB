@@ -24,24 +24,18 @@
 #ifndef _AST_H_
 #define _AST_H_
 
-#include "AST_statement.h"
+#include <stdlib.h>
 
-typedef enum AST_TYPE_ENUM
+typedef struct TOP_STATEMENT_AST_STRUCT
 {
-  AST_TABLE_STATEMENT
-} AST_type_T;
 
-typedef union AST_VALUE_UNION
+} top_statement_AST_T;
+
+typedef struct QUERY_AST_STRUCT
 {
-  struct TABLE_STATEMENT_AST_STRUCT *table_statement;
-} AST_value_T;
+  char *database_name;
+} query_AST_T;
 
-typedef struct AST_STRUCT
-{
-  AST_type_T type;
-  AST_value_T *value;
-} AST_T;
-
-AST_T *init_AST_with_table_statement(struct TABLE_STATEMENT_AST_STRUCT *table_statement);
+query_AST_T *init_query_AST(char *database_name);
 
 #endif /* _AST_H_ */
