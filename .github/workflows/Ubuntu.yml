@@ -21,3 +21,6 @@ jobs:
 
     - name: Build PQL
       run: cd pql; cmake --build ${{github.workspace}}/build --config ${{env.BUILD_TYPE}}
+
+    - name: Test PQL
+      run: cd pql/build; ctest --verbose
