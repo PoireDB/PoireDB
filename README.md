@@ -1,7 +1,9 @@
 # PoireDB
+![](https://github.com/poiredb/poiredb/workflows/Windows/badge.svg)
+![](https://github.com/poiredb/poiredb/workflows/Ubuntu/badge.svg)
+![](https://github.com/poiredb/poiredb/workflows/MacOS/badge.svg)
 ![](https://img.shields.io/github/license/poiredb/poiredb)
 ![](https://img.shields.io/tokei/lines/github/poiredb/poiredb)
-![](https://img.shields.io/github/workflow/status/poiredb/poiredb/check-pql)
 ![](https://img.shields.io/github/commit-activity/w/poiredb/poiredb)
 
 PoireDB - is an experimental DBMS made in C.
