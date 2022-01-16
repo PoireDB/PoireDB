@@ -1,1 +1,2 @@
-table account {};
+db `cool_db`;
+table account (

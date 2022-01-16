@@ -74,7 +74,8 @@ static token_T *get_name_token(lexer_T *lexer) {
         VBOOLEAN, start_pos, lexer->current_position,
         init_token_value_with_boolean(strcmp(name_buffer, "true") == 0));
   }
-  if (strcmp(name_buffer, "db") == 0 || strcmp(name_buffer, "delete") == 0) {
+  if (strcmp(name_buffer, "db") == 0 || strcmp(name_buffer, "delete") == 0 ||
+      strcmp(name_buffer, "table") == 0) {
     return init_token(KEYWORD, start_pos, lexer->current_position,
                       init_token_value_with_string(name_buffer));
   }
