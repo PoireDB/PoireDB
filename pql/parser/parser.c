@@ -53,6 +53,7 @@ query_AST_T *parser_parse(parser_T *parser) {
 
   /* ========= return AST ========= */
   query_AST_T *ast = init_query_AST(database_name);
+  ast->top_compound = top_compound;
   return ast;
 }
 
@@ -71,35 +72,36 @@ top_statement_AST_T *parser_parse_top_statement(parser_T *parser) {
   switch (parser->current_token->type) {
   case KEYWORD: {
     char *keyword = parser->current_token->value->string;
-    if (!strcmp(keyword, "delete")) {
+    if (strcmp(keyword, "delete") == 0) {
       return parser_parse_delete_top_statement(parser);
     }
   }
   default:
-    printf("i don't know %d", parser->current_token->type);
+    printf("i don't know %d: %c", parser->current_token->type,
+           parser->current_token->value->character);
+    // printf("i don't know %c", parser->current_token->type);
     exit(1);
   }
-  require_punctuator(parser, ';');
   return NULL;
 }
 
 top_statement_AST_T *parser_parse_delete_top_statement(parser_T *parser) {
   /* ========= parse delete top statement ========= */
   require_keyword_token(parser, "delete");
-  require_punctuator(parser, '(');
   char *table_name = parser->current_token->value->string;
   require_token(parser, IDENTIFIER);
-  require_punctuator(parser, ')');
+  require_punctuator(parser, ';');
 
   /* ========= initialize delete top statement AST ========= */
   delete_top_statement_AST_T *delete_stmt_ast =
       calloc(1, sizeof(struct DELETE_TOP_STATEMENT_AST_STRUCT));
   delete_stmt_ast->table_name = table_name;
 
-  /* ========= initialize more general (top statement) AST and return =========
-   */
+  /* ======= initialize more general (top statement) AST and return ======= */
   top_statement_AST_T *ast = init_top_statement_AST(DELETE);
-  ast->statement->delete_stmt = delete_stmt_ast;
+  // printf("EVERYTHING IS OK!!!!!!!");
+  // exit(1);
+  ast->statement.delete_stmt = delete_stmt_ast;
   return ast;
 }
 

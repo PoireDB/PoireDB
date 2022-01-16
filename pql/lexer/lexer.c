@@ -69,12 +69,12 @@ static token_T *get_name_token(lexer_T *lexer) {
     current_index++;
   }
   name_buffer[current_index] = '\0';
-  if (!strcmp(name_buffer, "true") || !strcmp(name_buffer, "false")) {
+  if (strcmp(name_buffer, "true") == 0 || strcmp(name_buffer, "false") == 0) {
     return init_token(
         VBOOLEAN, start_pos, lexer->current_position,
-        init_token_value_with_boolean(!strcmp(name_buffer, "true")));
+        init_token_value_with_boolean(strcmp(name_buffer, "true") == 0));
   }
-  if (!strcmp(name_buffer, "db") || !strcmp(name_buffer, "delete")) {
+  if (strcmp(name_buffer, "db") == 0 || strcmp(name_buffer, "delete") == 0) {
     return init_token(KEYWORD, start_pos, lexer->current_position,
                       init_token_value_with_string(name_buffer));
   }

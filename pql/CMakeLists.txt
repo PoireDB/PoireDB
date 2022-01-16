@@ -32,6 +32,16 @@ add_executable(pql_lexer_test
   token/value.c
   util/string.c
   log/log.c)
+add_executable(pql_parser_test
+  parser/test_parser.c
+  parser/parser.c
+  AST/AST.c
+  lexer/lexer.c
+  token/token.c
+  token/position.c
+  token/value.c
+  util/string.c
+  log/log.c)
 
 enable_testing()
 add_test(LexerTest pql_lexer_test)
