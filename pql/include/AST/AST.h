@@ -27,9 +27,9 @@
 #include <stdlib.h>
 
 typedef enum PQL_TYPE_ENUM {
-  NUMBER,
-  STRING,
-  BOOLEAN,
+  TNUMBER,
+  TSTRING,
+  TBOOLEAN,
 } pql_type_T;
 
 typedef struct DELETE_TOP_STATEMENT_AST_STRUCT {
