@@ -24,6 +24,12 @@ add_executable(pql_parse
   util/string.c
   util/file.c
   log/log.c)
+add_executable(pql_token_test
+  token/test_token.c
+  token/token.c
+  token/position.c
+  token/value.c
+  util/string.c)
 add_executable(pql_lexer_test
   lexer/test_lexer.c
   lexer/lexer.c
@@ -44,4 +50,6 @@ add_executable(pql_parser_test
   log/log.c)
 
 enable_testing()
+add_test(TokenTest pql_token_test)
 add_test(LexerTest pql_lexer_test)
+add_test(ParserTest pql_parser_test)

@@ -3,6 +3,8 @@
     "*.txt": "fsharp",
     "value.h": "c",
     "stdio.h": "c",
-    "parser.h": "c"
+    "parser.h": "c",
+    "cu.h": "c",
+    "tau.h": "c"
   }
 }
