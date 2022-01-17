@@ -5,6 +5,7 @@
     "stdio.h": "c",
     "parser.h": "c",
     "cu.h": "c",
-    "tau.h": "c"
+    "tau.h": "c",
+    "token.h": "c"
   }
 }

@@ -21,8 +21,9 @@
  * IN THE SOFTWARE.
  */
 
-#include "../include/tau.h"
 #include "../include/token/token.h"
+
+#include "../include/tau.h"
 #include <stdbool.h>
 
 TAU_MAIN()
