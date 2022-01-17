@@ -1,5 +1,5 @@
 <p align="center"><img width="100" src="./images/poiredb_icon.svg"></img></p>
-<h1 align="center"><a href="https://github.com/poiredb/poiredb">PoireDB - fast and easy Database Control System</a></h1>
+<h1 align="center"><a href="https://github.com/poiredb/poiredb">PoireDB - fast and easy DataBase Managment System</a></h1>
 
 <p align="center">
 <img src="https://github.com/poiredb/poiredb/workflows/Windows/badge.svg"></img>
@@ -15,7 +15,7 @@
 ## Compiling on Windows
 
 ### Compiling PQL
-Requirements: `Visual Studio, MSBuild, CMake, Golang`
+Requirements: `Visual Studio, MSBuild, CMake`:
 ```powershell
 cd pql/
 cmake -S . -B build/
@@ -25,6 +25,7 @@ MSBuild.exe pql.sln
 Then add all binaries into the `$PATH` environmental variable.
 
 ### Compiling PoireDB server
+Requirements: `Golang, (any package found in go.sum file)`:
 ```powershell
 cd ../..
 go build cmd/poiredb
@@ -46,7 +47,7 @@ sudo cp <binary> $HOME/bin/<binary>
 ```
 
 ### Compiling PoireDB server
-Requirements: `Golang`
+Requirements: `Golang, (any package found in go.sum file)`
 ```bash
 cd ../..
 go build cmd/poiredb
