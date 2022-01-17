@@ -72,6 +72,17 @@ top_statement_AST_T **parser_parse_top_statements(parser_T *parser) {
   return top_compound;
 }
 
+#ifdef POS_ARGS
+#warning "POS_ARGS macro was already defined, redefining"
+#undef POS_ARGS
+#endif
+
+#define POS_ARGS                                                               \
+  parser->lexer->filename, parser->current_token->start_pos.line,              \
+      parser->current_token->start_pos.column,                                 \
+      parser->current_token->end_pos.line,                                     \
+      parser->current_token->end_pos.column
+
 top_statement_AST_T *parser_parse_top_statement(parser_T *parser) {
   switch (parser->current_token->type) {
   case KEYWORD: {
@@ -82,9 +93,7 @@ top_statement_AST_T *parser_parse_top_statement(parser_T *parser) {
       return parser_parse_table_top_statement(parser);
   }
   default:
-    printf("i don't know %d: %s", parser->current_token->type,
-           parser->current_token->value->string);
-    // printf("i don't know %c", parser->current_token->type);
+    log_error("%s:(%ld:%ld::%ld:%ld): unexcepted '%s'", POS_ARGS, dump_token_type(parser->current_token->type));
     exit(1);
   }
   return NULL;
@@ -128,15 +137,9 @@ top_statement_AST_T *parser_parse_table_top_statement(parser_T *parser) {
   return ast;
 }
 
-#define POS_ARGS                                                               \
-  parser->lexer->filename, parser->current_token->start_pos.line,              \
-      parser->current_token->start_pos.column,                                 \
-      parser->current_token->end_pos.line,                                     \
-      parser->current_token->end_pos.column
-
 void require_token(parser_T *parser, token_type_T token_type) {
   if (parser->current_token->type != token_type) {
-    log_error("%s:(%d:%d::%d:%d): unexcepted: `%s`, excepted `%s` token",
+    log_error("%s:(%ld:%ld::%ld:%ld): unexcepted: %s, expecting %s token",
               POS_ARGS, dump_token_type(parser->current_token->type),
               dump_token_type(token_type));
     exit(1);
@@ -146,14 +149,14 @@ void require_token(parser_T *parser, token_type_T token_type) {
 
 void require_keyword_token(parser_T *parser, char *keyword) {
   if (parser->current_token->type != KEYWORD) {
-    log_error("%s:(%d:%d::%d:%d): unexcepted: `%s`, excepted `%s` token "
+    log_error("%s:(%ld:%ld::%ld:%ld): unexcepted: `%s`, excepted `%s` token "
               "(keyword=`%s`)",
               POS_ARGS, dump_token_type(parser->current_token->type),
               dump_token_type(KEYWORD), keyword);
     exit(1);
   }
   if (strcmp(parser->current_token->value->string, keyword)) {
-    printf("%s:(%d:%d::%d:%d): unexcepted keyword: `%s`, excepted: `%s`",
+    printf("%s:(%ld:%ld::%ld:%ld): unexcepted keyword: `%s`, excepted: `%s`",
            POS_ARGS, parser->current_token->value->string, keyword);
     exit(1);
   }
@@ -162,7 +165,7 @@ void require_keyword_token(parser_T *parser, char *keyword) {
 
 void require_punctuator(parser_T *parser, char punctuator) {
   if (parser->current_token->type != PUNCTUATOR) {
-    log_error("%s:(%d:%d::%d:%d): unexcepted: `%s`, excepted punctuator: `%c`",
+    log_error("%s:(%ld:%ld::%ld:%ld): unexcepted: `%s`, excepted punctuator: `%c`",
               POS_ARGS,
               dump_token_value(parser->current_token->value,
                                parser->current_token->type),
@@ -170,9 +173,11 @@ void require_punctuator(parser_T *parser, char punctuator) {
     exit(1);
   }
   if (parser->current_token->value->character != punctuator) {
-    log_error("%s:(%d:%d::%d:%d): unexcepted punctuator: `%c`", POS_ARGS,
+    log_error("%s:(%ld:%ld::%ld:%ld): unexcepted punctuator: `%c`", POS_ARGS,
               parser->current_token->value->character);
     exit(1);
   }
   parser->current_token = check_next_token(parser);
 }
+
+#undef POS_ARGS
