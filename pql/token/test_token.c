@@ -54,7 +54,4 @@ TEST(foo, test_TokenValueDump) {
   CHECK(strcmp(dump_token_value(str, KEYWORD), str_str) == 0);
   CHECK(strcmp(dump_token_value(str, VSTRING), str_str) == 0);
   CHECK(strcmp(dump_token_value(str, COMMENT), str_str) == 0);
-
-  free(str_str);
-  free(str);
 }
