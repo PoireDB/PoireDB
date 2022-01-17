@@ -10,7 +10,7 @@
 <img src="https://img.shields.io/github/commit-activity/w/poiredb/poiredb"></img>
 </p>
 
-<p align="center"><img width="600" src="images/carbon.png"></img></p>
+<p align="center"><img width="600" src="images/im.png"></img></p>
 
 ## Compiling on Windows
 
