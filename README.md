@@ -1,4 +1,4 @@
-<p align="center"><img width="100" src="https://avatars.githubusercontent.com/u/97557785?s=400&u=dcd5c22a819e9ea281aff71005524ffa181ae7f0&v=4"></img></p>
+<p align="center"><img width="100" src="./poiredb_icon.svg"></img></p>
 <h1 align="center"> PoireDB </h1>
 
 ![](https://github.com/poiredb/poiredb/workflows/Windows/badge.svg)
